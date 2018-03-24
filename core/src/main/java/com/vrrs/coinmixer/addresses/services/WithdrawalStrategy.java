@@ -36,7 +36,7 @@ public interface WithdrawalStrategy {
 			double upperBound = targetSum;
 			for(int i = 0; i < n - 1; i++) {
 				double entry = selectRandomFrom0To(upperBound);
-				upperBound = targetSum - entry;
+				upperBound -= entry;
 				vector.add(entry);
 			}
 			vector.add(upperBound);
