@@ -1,0 +1,31 @@
+jobCoinBaseURL: http://jobcoin.gemini.com/clammy/
+houseAddress: victorAddress01
+
+server:
+  adminContextPath: /coinmixer/v1/
+  applicationConnectors:
+    - type: http
+      port: 17320
+  adminConnectors:
+    - type: http
+      port: 17321
+      
+  requestLog:
+    timeZone: America/New_York
+    appenders:
+        - type : console
+          threshold: INFO
+        - type: file
+          currentLogFilename: ${HOME}/coinmixer.log
+          archive: false
+          timeZone: America/New_York
+            
+logging:
+  level: INFO
+  appenders:
+    - type: file
+      currentLogFilename: ${HOME}/coinmixer.log
+      archive: true
+      archivedLogFilenamePattern: ${HOME}/coinmixer-%d{yyyy/MM}.log.gz
+      archivedFileCount: 31
+      timeZone: America/New_York
