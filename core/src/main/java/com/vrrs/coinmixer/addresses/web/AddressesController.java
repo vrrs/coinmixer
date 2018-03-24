@@ -41,11 +41,5 @@ public final class AddressesController {
 	public WithdrawalTransactionStatus initiateWithdraw(@PathParam("address") String address) {
 		return addressesServiceFacade.initiateWithdraw(address);
 	}
-	
-	@POST
-	@Path("/withdrawal/")
-	public MixedAddressesWithBalances initiateWithdraw(SourceAddresses sourceAddresses) {
-		return addressesServiceFacade.getNewMixedAddressesAndWithdraw(sourceAddresses.getSourceAddresses());
-	}
 
 }

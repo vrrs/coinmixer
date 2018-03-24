@@ -17,5 +17,16 @@ public class AddressWithBalance {
 	public double getBalance() {
 		return balance;
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if(other instanceof AddressWithBalance) {
+			AddressWithBalance that = (AddressWithBalance) other;
+			return this.getBalance() == that.getBalance() && 
+					this.getAddress().equals(that.getAddress());
+		} else {
+			return false;
+		}
+	}
 
 }

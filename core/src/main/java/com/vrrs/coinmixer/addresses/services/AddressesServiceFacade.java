@@ -25,7 +25,7 @@ public final class AddressesServiceFacade {
 	public MixedAddressesWithBalances getNewMixedAddresses(List<String> sourceAddresses) {
 		String depositAddress = coinClient.newAddress();
 		addressPool.setMixedAddresses(new MixedAddresses(depositAddress, sourceAddresses));
-		List<AddressWithBalance> sourceAddressesWithBalance = getSourceAddressesWithBalance(sourceAddresses, address -> 0d);
+		List<AddressWithBalance> sourceAddressesWithBalance = getSourceAddressesWithBalance(sourceAddresses, coinClient::getBalance);
 		return new MixedAddressesWithBalances(0, depositAddress, sourceAddressesWithBalance);
 	}
 
@@ -45,16 +45,9 @@ public final class AddressesServiceFacade {
 	}
 
 	public WithdrawalTransactionStatus initiateWithdraw(String address) {
+		houseTransactionService.depositToHouseAddress();
 		houseTransactionService.withdrawFromHouseAddress(address);
 		return new WithdrawalTransactionStatus(true);
-	}
-	
-	public MixedAddressesWithBalances getNewMixedAddressesAndWithdraw(List<String> sourceAddresses) {
-		String depositAddress = coinClient.newAddress();
-		addressPool.setMixedAddresses(new MixedAddresses(depositAddress, sourceAddresses));
-		houseTransactionService.depositToHouseAddress();
-		houseTransactionService.withdrawFromHouseAddress(depositAddress);
-		return getMixedAddresses(depositAddress);
 	}
 
 }

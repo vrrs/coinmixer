@@ -25,5 +25,17 @@ public class MixedAddressesWithBalances {
 	public List<AddressWithBalance> getAddressesWithBalance() {
 		return addressesWithBalance;
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if(other instanceof MixedAddressesWithBalances) {
+			MixedAddressesWithBalances that = (MixedAddressesWithBalances) other;
+			return this.getTotalBalance() == that.getTotalBalance() && 
+					this.getDepositAddress().equals(that.getDepositAddress()) &&
+					this.getAddressesWithBalance().equals(that.getAddressesWithBalance());
+		} else {
+			return false;
+		}
+	}
 
 }

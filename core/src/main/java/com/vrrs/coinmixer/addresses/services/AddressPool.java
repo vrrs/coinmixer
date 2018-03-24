@@ -4,6 +4,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Maps;
@@ -63,9 +64,13 @@ public final class AddressPool {
 		return withdrawalQueue.pop();
 	}
 
-	public WithdrawalTransaction dequeueWithdrawal(String depositAddress) {
+	public void dequeueWithdrawal(String depositAddress, Consumer<WithdrawalTransaction> withdrawalConsumer) {
 		WithdrawalTransaction withdrawalTransaction = new WithdrawalTransaction(0, getMixedAddresses(depositAddress));
-		while(withdrawalQueue.remove(withdrawalTransaction));
-		return withdrawalTransaction;
+		withdrawalQueue.iterator().forEachRemaining(w -> {
+			if(w.equals(withdrawalTransaction)) {
+				withdrawalQueue.remove(w);
+				withdrawalConsumer.accept(w);
+			}
+		});
 	}
 }

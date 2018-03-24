@@ -2,6 +2,7 @@ package com.vrrs.coinmixer.coins.clients;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.function.Supplier;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -24,15 +25,21 @@ import io.vavr.control.Try;
 public final class JobCoinClient implements CoinClient {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(JobCoinClient.class);
-	
 	private static final int ADDRESS_SIZE = 20;
 	private static final int MAX_NUM_OF_RETRIES = 10;
+	
 	private final String baseURL;
 	private final ObjectMapper jsonMapper;
+	private final Supplier<String> addressSupplier;
 
 	public JobCoinClient(String baseURL) {
+		this(baseURL, () -> RandomStringUtils.randomAlphabetic(ADDRESS_SIZE));
+	}
+	
+	public JobCoinClient(String baseURL, Supplier<String> addressSupplier) {
 		this.baseURL = baseURL;
 		this.jsonMapper = new ObjectMapper();
+		this.addressSupplier = addressSupplier;
 	}
 
 	@Override
@@ -78,7 +85,7 @@ public final class JobCoinClient implements CoinClient {
 	@Override
 	public String newAddress() {
 		for (int retry = 0; retry < MAX_NUM_OF_RETRIES; retry++) {
-			String newAddress = RandomStringUtils.randomAlphabetic(ADDRESS_SIZE);
+			String newAddress = addressSupplier.get();
 			boolean isSuccess = Try.run(() -> getNewAddressResponse(newAddress))
 					.onFailure(e -> LOG.info("Failed to create new address", e)).isSuccess();
 			if (isSuccess)

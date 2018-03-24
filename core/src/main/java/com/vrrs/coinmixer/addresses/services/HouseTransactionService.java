@@ -37,8 +37,7 @@ public final class HouseTransactionService {
 	public void withdrawFromHouseAddress(String address) {
 		String depositAddress = addressPool.getMixedAddresses(address).getDepositAddress();
 		final String houseAddress = addressPool.getHouseAddress();
-		WithdrawalTransaction withdrawlTransaction = addressPool.dequeueWithdrawal(depositAddress);
-		withdraw(houseAddress, withdrawlTransaction);
+		addressPool.dequeueWithdrawal(depositAddress, w -> withdraw(houseAddress, w));
 	}
 
 	private void withdraw(String address, WithdrawalTransaction withdrawlTransaction) {
