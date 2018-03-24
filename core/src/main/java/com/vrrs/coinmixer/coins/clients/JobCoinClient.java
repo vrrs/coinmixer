@@ -2,6 +2,10 @@ package com.vrrs.coinmixer.coins.clients;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,13 +44,12 @@ public final class JobCoinClient implements CoinClient {
 	}
 	
 	private String getDepositResponse(String fromAddress, String toAddress, double amount) throws IOException {
-		return new ApacheRequest(baseURL)
-				.uri().path("/api/transactions/").back()
-				.body()
-					.formParam("fromAddress", fromAddress)
-					.formParam("toAddress", toAddress)
-					.formParam("amount", String.valueOf(amount))
-					.back()
+		final String payload = jsonMapper.writeValueAsString(new JobCoinRequest().setAmount(String.valueOf(amount))
+				.setFromAddress(fromAddress).setToAddress(toAddress));
+		return new ApacheRequest(baseURL).uri().path("/api/transactions").back()
+				.method(Request.POST)
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+				.body().set(payload).back()
 				.fetch()
 				.as(RestResponse.class)
 				.assertStatus(HttpURLConnection.HTTP_OK)
@@ -86,12 +89,13 @@ public final class JobCoinClient implements CoinClient {
 	
 	private void getNewAddressResponse(String address) throws IOException {
 		new ApacheRequest(baseURL)
-				.uri().path("/create/").back()
+				.uri().path("/create").back()
 				.method(Request.POST)
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED)
 				.body().formParam("address", address).back()
 				.fetch()
 				.as(RestResponse.class)
-				.assertStatus(HttpURLConnection.HTTP_OK);
+				.assertStatus(HttpURLConnection.HTTP_SEE_OTHER);
 	}
 	
 	@JsonInclude(Include.NON_NULL)
@@ -113,6 +117,35 @@ public final class JobCoinClient implements CoinClient {
 		public void setBalance(String balance) {
 			this.balance = balance;
 		}	
+	}
+	@JsonInclude(Include.NON_NULL)
+	@JsonIgnoreProperties(ignoreUnknown = true)
+	public static final class JobCoinRequest {
+		
+		private String amount;
+		private String fromAddress;
+		private String toAddress;
+		public String getAmount() {
+			return amount;
+		}
+		public JobCoinRequest setAmount(String amount) {
+			this.amount = amount;
+			return this;
+		}
+		public String getFromAddress() {
+			return fromAddress;
+		}
+		public JobCoinRequest setFromAddress(String fromAddress) {
+			this.fromAddress = fromAddress;
+			return this;
+		}
+		public String getToAddress() {
+			return toAddress;
+		}
+		public JobCoinRequest setToAddress(String toAddress) {
+			this.toAddress = toAddress;
+			return this;
+		}
 	}
 
 }
