@@ -43,7 +43,8 @@ Acquire a deposit address
 }
 ```
 Get source addresses and deposit address basic info
-```[vregalado@localhost bin]$ curl -XGET -H "Content-type: application/json" http://localhost:17320/coinmixer/v1/addresses/vane01
+```
+[vregalado@localhost bin]$ curl -XGET -H "Content-type: application/json" http://localhost:17320/coinmixer/v1/addresses/vane01
 {
   "total_balance" : 0.0,
   "deposit_address" : "hYigQXSDutdBosoizulJ",
@@ -57,7 +58,8 @@ Get source addresses and deposit address basic info
 }
 ```
 Initiate a withdrawl and check balances
-```[vregalado@localhost bin]$ curl -XPOST -H "Content-type: application/json" http://localhost:17320/coinmixer/v1/withdrawal/vane01
+```
+[vregalado@localhost bin]$ curl -XPOST -H "Content-type: application/json" http://localhost:17320/coinmixer/v1/withdrawal/vane01
 {
   "withdrawn" : true
 }
