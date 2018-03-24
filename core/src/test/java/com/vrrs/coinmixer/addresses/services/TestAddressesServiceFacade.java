@@ -44,7 +44,7 @@ public class TestAddressesServiceFacade {
 		return serviceFacade;
 	}
 	
-	@Test
+	//@Test
 	public void willInitiateWithdrawlOfMixedAliceAddresses() {
 		final String depositAddress = RandomStringUtils.randomAlphabetic(10);
 		CoinClient jobCoinClient = new JobCoinClient("http://jobcoin.gemini.com/clammy/", () -> depositAddress);

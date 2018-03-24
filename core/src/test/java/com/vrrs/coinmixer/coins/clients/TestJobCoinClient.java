@@ -8,9 +8,10 @@ public class TestJobCoinClient {
 	private final CoinClient jobCoinClient = new JobCoinClient("http://jobcoin.gemini.com/clammy/");
 	
 	@Test
-	public void willRetrieveBalanceOfVictor() {
-		final String victorAddress = "victorAddress01";
-		assertThat(jobCoinClient.getBalance(victorAddress)).isEqualTo(50);
+	public void willRetrieveBalanceOfAliceSister() {
+		final String aliceSisterAddress = "KSkPEAmopl";
+		assertThat(jobCoinClient.getBalance(aliceSisterAddress))
+		.isNotEqualTo(0);
 	}
 	
 	@Test

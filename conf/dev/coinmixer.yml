@@ -1,3 +1,4 @@
+
 jobCoinBaseURL: http://jobcoin.gemini.com/clammy/
 houseAddress: victorAddress01
 
@@ -9,16 +10,6 @@ server:
   adminConnectors:
     - type: http
       port: 17321
-      
-  requestLog:
-    timeZone: America/New_York
-    appenders:
-        - type : console
-          threshold: INFO
-        - type: file
-          currentLogFilename: ${HOME}/coinmixer.log
-          archive: false
-          timeZone: America/New_York
             
 logging:
   level: INFO
